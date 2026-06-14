@@ -23,7 +23,7 @@
   { "name": "Huvan", "monsoon": "Iruvai", "desc": "Mirror-flat, calm seas and completely cloudless blue skies. The absolute peak of tranquil weather conditions. Highly favored for long-range oceanic voyages and fishing deep drop-offs." },
   { "name": "Dhinasha", "monsoon": "Iruvai", "desc": "Steady, predictable north-easterly trade winds, moderate rolling seas, and intense, bright daily sunshine. Exceptional water clarity across eastern channels." },
   { "name": "Hiyaviha", "monsoon": "Iruvai", "desc": "Winds die down completely, leading to dead-calm, glassy sea surfaces. Daily humidity and ambient temperatures climb rapidly to their yearly peaks." },
-  { "name": "Furabadhuruva", "monsigh": "Iruvai", "desc": "Atmospheric humidity builds up heavily, giving rise to magnificent cloud towers. Days are punctuated by brief, explosive bursts of deep thunder and vivid lightning." },
+  { "name": "Furabadhuruva", "monsoon": "Iruvai", "desc": "Atmospheric humidity builds up heavily, giving rise to magnificent cloud towers. Days are punctuated by brief, explosive bursts of deep thunder and vivid lightning." },
   { "name": "Fasbadhuruva", "monsoon": "Iruvai", "desc": "Intense, blinding daily heat broken by occasional heavy thunder showers. Traditional farmers monitor the thunder intensity to predict upcoming crop yields." },
   { "name": "Reyva", "monsoon": "Iruvai", "desc": "The absolute final phase of the dry season. Generally calm and hot, but if unseasonal low-pressure systems breach the zone, the resulting storms are severe." }
 ]

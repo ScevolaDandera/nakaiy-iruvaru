@@ -5,12 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ކޯނި • ނަކަތް ސޯލާ އިންޖީނު</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&family=Faruma&display=swap');
-        body { font-family: 'Faruma', 'Inter', sans-serif; }
-        /* Keep numerical metrics crisp and left-to-right readable */
-        .numeric-data { font-family: 'Inter', monospace; direction: ltr; text-align: left; }
-    </style>
+<style>
+    /* Register the Regular weight file */
+    @font-face {
+        font-family: 'Faagathi Dheli';
+        src: url('./FaagathiDheli-Regular.woff2') format('woff2');
+        font-weight: 400; /* Regular mapped to utility standard 400 */
+        font-style: normal;
+        font-display: swap;
+    }
+
+    /* Register the Light weight file */
+    @font-face {
+        font-family: 'Faagathi Dheli';
+        src: url('./FaagathiDheli-Light.woff2') format('woff2');
+        font-weight: 300; /* Light mapped to utility standard 300 */
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
+    
+    /* Global assignment with smooth rendering enhancements */
+    body { 
+        font-family: 'Faagathi Dheli', 'Inter', sans-serif; 
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Keep numbers and timers left-to-right readable using Inter */
+    .numeric-data { 
+        font-family: 'Inter', monospace; 
+        direction: ltr; 
+        text-align: left; 
+    }
+</style>
 </head>
 <body id="app-body" class="bg-[#0f172a] text-slate-200 min-h-screen flex flex-col transition-colors duration-1000">
 

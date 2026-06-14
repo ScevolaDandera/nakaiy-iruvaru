@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nakaiy • Solar Astronomical Engine</title>
+    <title>Konei • Nakaiy Solar Engine</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap');
@@ -14,12 +14,17 @@
 
     <header class="border-b border-slate-800 p-6 flex justify-between items-center max-w-5xl w-full mx-auto">
         <div class="space-y-1">
-            <h1 class="text-xl font-bold tracking-wider text-white">NAKAIY ENGINE</h1>
-            <p class="text-xs text-slate-400">Pure Solar Tracking • No Gregorian Hardcoding</p>
+            <h1 class="text-xl font-bold tracking-wider text-white">KONEI ENGINE</h1>
+            <p class="text-xs text-slate-400">Solar Coordinate System & Constellation Explorer</p>
         </div>
-        <span id="monsoon-badge" class="px-3 py-1 rounded-full text-xs font-bold tracking-widest transition-all duration-1000">
-            LOADING...
-        </span>
+        <div class="flex items-center gap-4">
+            <button id="reset-to-now" class="hidden text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-md hover:bg-emerald-500/20 transition-all cursor-pointer">
+                ⌂ Return to Now
+            </button>
+            <span id="monsoon-badge" class="px-3 py-1 rounded-full text-xs font-bold tracking-widest transition-all duration-1000">
+                LOADING...
+            </span>
+        </div>
     </header>
 
     <main class="flex-1 max-w-5xl w-full mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-6 my-4">
@@ -27,14 +32,24 @@
         <section class="md:col-span-2 space-y-6 flex flex-col justify-between">
             
             <div class="bg-slate-900/40 border border-slate-800 rounded-xl p-8 space-y-6 backdrop-blur-sm">
-                <div class="space-y-1">
-                    <span class="text-xs font-bold tracking-widest text-slate-400 uppercase">Current Position</span>
-                    <div id="nakaiy-name" class="text-5xl font-extrabold tracking-tight text-white py-2">--</div>
+                <div class="flex justify-between items-start">
+                    <div class="space-y-1">
+                        <span id="view-mode-indicator" class="text-xs font-bold tracking-widest text-slate-400 uppercase">Current Position</span>
+                        <div id="nakaiy-name" class="text-5xl font-extrabold tracking-tight text-white py-2">--</div>
+                    </div>
+                    <span id="card-monsoon-badge" class="text-xs font-bold uppercase tracking-widest px-2.5 py-1 rounded bg-slate-800 text-slate-400">--</span>
                 </div>
 
                 <div class="space-y-2">
+                    <h4 class="text-xs font-bold tracking-wider text-slate-400 uppercase">Traditional Environment Profile</h4>
+                    <p id="nakaiy-desc" class="text-sm text-slate-300 leading-relaxed bg-slate-950/30 p-4 rounded-lg border border-slate-800/50">
+                        Loading traditional weather, marine cycles, and behavioral profiles...
+                    </p>
+                </div>
+
+                <div id="progress-container" class="space-y-2">
                     <div class="flex justify-between text-xs font-semibold text-slate-400">
-                        <span>Nakaiy Progress</span>
+                        <span>Solar Orbital Progress</span>
                         <span id="progress-text">0%</span>
                     </div>
                     <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
@@ -43,8 +58,8 @@
                 </div>
 
                 <div class="pt-4 border-t border-slate-800/60 flex flex-col sm:flex-row sm:justify-between gap-2">
-                    <span class="text-sm text-slate-400">Next Transition:</span>
-                    <span id="countdown-text" class="text-sm font-bold text-emerald-400">Calculating cosmic boundaries...</span>
+                    <span id="time-meta-label" class="text-sm text-slate-400">Next Transition:</span>
+                    <span id="countdown-text" class="text-sm font-bold text-emerald-400">Calculating...</span>
                 </div>
             </div>
 
@@ -52,7 +67,7 @@
                 <h3 class="text-xs font-bold tracking-wider text-slate-400 uppercase">Astronomical Ephemeris Data</h3>
                 <div class="grid grid-cols-2 gap-4 text-xs">
                     <div>
-                        <p class="text-slate-500">Apparent Solar Longitude (λ)</p>
+                        <p id="longitude-label" class="text-slate-500">Apparent Solar Longitude (λ)</p>
                         <p id="raw-longitude" class="font-bold text-slate-300 mt-1">0.0000°</p>
                     </div>
                     <div>
@@ -65,7 +80,7 @@
 
         <section class="bg-slate-900/20 border border-slate-800/80 rounded-xl p-6 flex flex-col h-[70vh]">
             <h3 class="text-xs font-bold tracking-wider text-slate-400 uppercase mb-4 pb-2 border-b border-slate-800">
-                The 27 Celestial Constellations
+                Explore Solar Constellations
             </h3>
             <div id="timeline-container" class="flex-1 overflow-y-auto space-y-2 pr-2 scrollbar-thin scrollbar-thumb-slate-800">
                 </div>
@@ -73,33 +88,53 @@
     </main>
 
     <footer class="text-center p-6 border-t border-slate-900 text-[10px] text-slate-500">
-        Engine computes orbital longitude relative to the Vernal Equinox ($0^\circ$). Derived from ancient Maldivian seasonal observation cycles.
+        Engine computes orbital longitude relative to the Vernal Equinox ($0^\circ$). Designed for offline calculation.
     </footer>
 
     <script>
         const NAKAIY_LIST = [
-            { name: "Assidha", monsoon: "Hulhangu" }, { name: "Burunu", monsoon: "Hulhangu" },
-            { name: "Kethi", monsoon: "Hulhangu" },   { name: "Roanu", monsoon: "Hulhangu" },
-            { name: "Miyahelia", monsoon: "Hulhangu" },{ name: "Adha", monsoon: "Hulhangu" },
-            { name: "Funoas", monsoon: "Hulhangu" },   { name: "Fus", monsoon: "Hulhangu" },
-            { name: "Ahuliha", monsoon: "Hulhangu" }, { name: "Maa", monsoon: "Hulhangu" },
-            { name: "Fura", monsoon: "Hulhangu" },    { name: "Uthura", monsoon: "Hulhangu" },
-            { name: "Atha", monsoon: "Hulhangu" },    { name: "Hitha", monsoon: "Hulhangu" },
-            { name: "Hey", monsoon: "Hulhangu" },     { name: "Viha", monsoon: "Hulhangu" },
-            { name: "Nora", monsoon: "Hulhangu" },    { name: "Dosha", monsoon: "Hulhangu" },
-            { name: "Mula", monsoon: "Iruvai" },      { name: "Furahalha", monsoon: "Iruvai" },
-            { name: "Uthurahalha", monsoon: "Iruvai" },{ name: "Huvan", monsoon: "Iruvai" },
-            { name: "Dhinasha", monsoon: "Iruvai" },  { name: "Hiyaviha", monsoon: "Iruvai" },
-            { name: "Furabadhuruva", monsoon: "Iruvai" },{ name: "Fasbadhuruva", monsoon: "Iruvai" },
-            { name: "Reyva", monsoon: "Iruvai" }
+            { name: "Assidha", monsoon: "Hulhangu", desc: "The dramatic awakening of the southwest monsoon. Characterized by sudden, isolated violent storms, thunder, and lightning, which clear out into periods of intense, blistering heat. Traditionally, the very first rainfall of Assidha is caught and considered highly auspicious." },
+            { name: "Burunu", monsoon: "Hulhangu", desc: "A period marked by high, whistling winds and severe storms at the beginning, which gradually give way to calm, clear intervals. Sea conditions fluctuate dramatically within hours, making deep reef passes tricky to navigate." },
+            { name: "Kethi", monsoon: "Hulhangu", desc: "Frequent, thick dark clouds dominate the horizon, accompanied by heavy, continuous downpours. The constant rainfall makes this a crucial period for island farmers to clear soils and harvest rainwater supplies." },
+            { name: "Roanu", monsoon: "Hulhangu", desc: "A stormy, unpredictable phase featuring strong, shifting gales and choppy, rough surface waters. Pelagic fish movements become highly sporadic as current lines break apart under surface chop." },
+            { name: "Miyahelia", monsoon: "Hulhangu", desc: "Dominated by intense, steady westerly winds. Frequent squall lines pass through, kicking up high wave actions and whitecaps across the open channels between atolls." },
+            { name: "Adha", monsoon: "Hulhangu", desc: "Westerly winds begin to stabilize into predictable patterns. Rainfall reduces to scattered showers. Large schools of baitfish begin moving closer to reef drop-offs, attracting predators." },
+            { name: "Funoas", monsoon: "Hulhangu", desc: "A notorious stretch featuring sudden, dangerous gales and highly erratic, rough seas. Offshore deep-sea navigation requires maximum caution due to rogue swells." },
+            { name: "Fus", monsoon: "Hulhangu", desc: "Heavily overcast sky conditions with a high frequency of rain. Despite the gloomy skies, marine productivity is exceptional, and local reef edges team with active life." },
+            { name: "Ahuliha", monsoon: "Hulhangu", desc: "The weather breaks briefly into calmer intervals as the intense mid-monsoon wind patterns begin to temporarily de-escalate. Clear skies show up for days at a time." },
+            { name: "Maa", monsoon: "Hulhangu", desc: "Generally calm, pleasant, and highly predictable weather hidden right in the middle of the wet season. Winds die down to a gentle breeze." },
+            { name: "Fura", monsoon: "Hulhangu", desc: "Mostly dry, clear conditions interspersed with brief, isolated showers. Gentle north-westerly breezes begin to introduce subtle shifts in current directions." },
+            { name: "Uthura", monsoon: "Hulhangu", desc: "Strong north-westerly winds make a firm comeback. Sudden, concentrated squalls disrupt the calm, causing rapid changes in surface conditions." },
+            { name: "Atha", monsoon: "Hulhangu", desc: "Beautiful, clear, and exceptionally calm intervals that are broken up unexpectedly by brief, sharp downpours that clear out as quickly as they arrived." },
+            { name: "Hitha", monsoon: "Hulhangu", desc: "Light winds and mild, scattered showers. This is traditionally a favored timeline for coastal weeding, planting tubers, and local lagoon net-fishing." },
+            { name: "Hey", monsoon: "Hulhangu", desc: "Chaotic, high-velocity winds that shift directions rapidly. Ocean currents become highly complex. This unique turbulence sparks massive feeding frenzies among pelagic species like yellowfin tuna." },
+            { name: "Viha", monsoon: "Hulhangu", desc: "Characterized by pristine, glass-like calm waters and peaceful, sunny days. Underwater visibility hits peak clarity for the late wet season." },
+            { name: "Nora", monsoon: "Hulhangu", desc: "Light breezes accompanied by unexpected sun-showers. Ocean currents become highly intricate and unpredictable inside major atoll channels." },
+            { name: "Dosha", monsoon: "Hulhangu", desc: "The final wrap-up phase of Hulhangu. Light, cooling north-easterly breezes start to settle in, steadily pushing out the last remaining moisture-heavy clouds." },
+            { name: "Mula", monsoon: "Iruvai", desc: "The official gateway into the Northeast Monsoon. Expect strong, steady winds and rough outer seas as the entire oceanic current system flips direction entirely." },
+            { name: "Furahalha", monsoon: "Iruvai", desc: "Characterized by powerful, persistent north-easterly winds and crisp, clear blue skies. Excellent pelagic fishing conditions develop across the northern atolls." },
+            { name: "Uthurahalha", monsoon: "Iruvai", desc: "Pristine clear skies paired with relentless, dry winds. Sea states remain moderately rough across open ocean passages due to long-traveling wind swells." },
+            { name: "Huvan", monsoon: "Iruvai", desc: "Mirror-flat, calm seas and completely cloudless blue skies. The absolute peak of tranquil weather conditions. Highly favored for long-range oceanic voyages and fishing deep drop-offs." },
+            { name: "Dhinasha", monsoon: "Iruvai", desc: "Steady, predictable north-easterly trade winds, moderate rolling seas, and intense, bright daily sunshine. Exceptional water clarity across eastern channels." },
+            { name: "Hiyaviha", monsoon: "Iruvai", desc: "Winds die down completely, leading to dead-calm, glassy sea surfaces. Daily humidity and ambient temperatures climb rapidly to their yearly peaks." },
+            { name: "Furabadhuruva", monsoon: "Iruvai", desc: "Atmospheric humidity builds up heavily, giving rise to magnificent cloud towers. Days are punctuated by brief, explosive bursts of deep thunder and vivid lightning." },
+            { name: "Fasbadhuruva", monsoon: "Iruvai", desc: "Intense, blinding daily heat broken by occasional heavy thunder showers. Traditional farmers monitor the thunder intensity to predict upcoming crop yields." },
+            { name: "Reyva", monsoon: "Iruvai", desc: "The absolute final phase of the dry season. Generally calm and hot, but if unseasonal low-pressure systems breach the zone, the resulting storms are severe." }
         ];
 
-        const DEGREES_PER_NAKAIY = 360 / 27; // Exactly 13.333333°
-        const ASSIDHA_START_LONGITUDE = 18.0; // The solar angle offset when Assidha begins
+        const DEGREES_PER_NAKAIY = 360 / 27; // 13.3333°
+        const ASSIDHA_START_LONGITUDE = 18.0;
+
+        // Application State Management
+        let appState = {
+            isTrackingLive: true,
+            selectedNakaiyIndex: null,
+            liveCurrentIndex: null
+        };
 
         function getSunEclipticLongitude(date) {
             const timeMs = date.getTime();
-            const j2000 = 946728000000; // Julian epoch Jan 1, 2000 12:00 UTC
+            const j2000 = 946728000000;
             const D = (timeMs - j2000) / 86400000;
 
             let q = (280.459 + 0.98564736 * D) % 360;
@@ -116,97 +151,169 @@
             return lambda;
         }
 
-        function buildTimelineUI(currentIndex) {
+        function handleNakaiyClick(clickedIndex) {
+            appState.isTrackingLive = false;
+            appState.selectedNakaiyIndex = clickedIndex;
+            document.getElementById("reset-to-now").classList.remove("hidden");
+            
+            // Re-render UI immediately to show user selection change
+            buildTimelineUI(clickedIndex);
+            updateDisplay();
+        }
+
+        function resetToLiveTracking() {
+            appState.isTrackingLive = true;
+            appState.selectedNakaiyIndex = appState.liveCurrentIndex;
+            document.getElementById("reset-to-now").classList.add("hidden");
+            
+            buildTimelineUI(appState.liveCurrentIndex);
+            
+            // Smoothly snap the active tracking card back into view focal point
             const container = document.getElementById("timeline-container");
-            container.innerHTML = ""; // Clear out stale markup
+            const activeRow = container.children[appState.liveCurrentIndex];
+            if (activeRow) {
+                activeRow.scrollIntoView({ block: "center", behavior: "smooth" });
+            }
+            updateDisplay();
+        }
+
+        function buildTimelineUI(activeIndex) {
+            const container = document.getElementById("timeline-container");
+            container.innerHTML = "";
 
             NAKAIY_LIST.forEach((nakaiy, index) => {
-                const row = document.createElement("div");
-                row.className = `flex justify-between items-center text-xs p-2.5 rounded-lg border transition-all duration-300 ${
-                    index === currentIndex 
-                    ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-300 font-bold shadow-sm" 
-                    : "bg-slate-900/20 border-slate-800/40 text-slate-500"
+                const isSelected = index === activeIndex;
+                const isActualLiveNow = index === appState.liveCurrentIndex;
+                
+                const row = document.createElement("button");
+                row.type = "button";
+                row.onclick = () => handleNakaiyClick(index);
+                
+                row.className = `w-full text-left flex justify-between items-center text-xs p-2.5 rounded-lg border transition-all duration-200 cursor-pointer ${
+                    isSelected 
+                    ? "bg-emerald-500/10 border-emerald-500/50 text-emerald-300 font-bold shadow-sm" 
+                    : "bg-slate-900/20 border-slate-800/40 text-slate-500 hover:border-slate-700 hover:text-slate-300"
                 }`;
                 
                 row.innerHTML = `
                     <div class="flex items-center gap-2">
-                        <span class="w-2 h-2 rounded-full ${index === currentIndex ? 'bg-emerald-400 animate-pulse' : 'bg-transparent'}"></span>
-                        <span>${nakaiy.name}</span>
+                        <span class="w-2 h-2 rounded-full ${isActualLiveNow ? 'bg-emerald-400 animate-pulse' : 'bg-transparent'}"></span>
+                        <span class="${isSelected ? 'text-white' : ''}">${nakaiy.name}</span>
+                        ${isActualLiveNow ? '<span class="text-[9px] bg-emerald-500/20 text-emerald-400 px-1 rounded">NOW</span>' : ''}
                     </div>
                     <span class="text-[10px] uppercase tracking-wider scale-90 ${nakaiy.monsoon === 'Iruvai' ? 'text-amber-500/60' : 'text-sky-500/60'}">${nakaiy.monsoon}</span>
                 `;
                 container.appendChild(row);
                 
-                // Automatically keep active items scrolled into readable view frame
-                if(index === currentIndex && !container.dataset.scrolled) {
+                // Initial load auto-scroll focus
+                if(isSelected && !container.dataset.scrolled) {
                     setTimeout(() => row.scrollIntoView({ block: "center", behavior: "smooth" }), 200);
                     container.dataset.scrolled = "true";
                 }
             });
         }
 
-        function updateEngine() {
+        function updateDisplay() {
             const now = new Date();
             const lon = getSunEclipticLongitude(now);
             
-            // Re-center frame of reference to match the astronomical offset
             let shiftedLon = lon - ASSIDHA_START_LONGITUDE;
             if (shiftedLon < 0) shiftedLon += 360;
             
-            const index = Math.floor(shiftedLon / DEGREES_PER_NAKAIY);
-            const progressFraction = (shiftedLon % DEGREES_PER_NAKAIY) / DEGREES_PER_NAKAIY;
-            const currentNakaiy = NAKAIY_LIST[index];
+            const exactLiveIndex = Math.floor(shiftedLon / DEGREES_PER_NAKAIY);
+            appState.liveCurrentIndex = exactLiveIndex;
 
-            // 1. Calculate dynamic countdown to next transition point
-            const degreesRemaining = DEGREES_PER_NAKAIY - (shiftedLon % DEGREES_PER_NAKAIY);
-            const approximateMsRemaining = degreesRemaining * (365.2422 / 360) * 24 * 60 * 60 * 1000;
-            
-            const seconds = Math.floor((approximateMsRemaining / 1000) % 60);
-            const minutes = Math.floor((approximateMsRemaining / (1000 * 60)) % 60);
-            const hours = Math.floor((approximateMsRemaining / (1000 * 60 * 60)) % 24);
-            const days = Math.floor(approximateMsRemaining / (1000 * 60 * 60 * 24));
+            // Determine which record index data to pull onto display card
+            const targetIndex = appState.isTrackingLive ? exactLiveIndex : appState.selectedNakaiyIndex;
+            const displayedNakaiy = NAKAIY_LIST[targetIndex];
 
-            const nextIndex = (index + 1) % 27;
-            const nextNakaiyName = NAKAIY_LIST[nextIndex].name;
-
-            // 2. Render calculations dynamically out to DOM elements
-            document.getElementById("nakaiy-name").innerText = currentNakaiy.name;
-            document.getElementById("progress-text").innerText = `${(progressFraction * 100).toFixed(4)}%`;
-            document.getElementById("progress-bar").style.width = `${progressFraction * 100}%`;
-            document.getElementById("countdown-text").innerText = `${days}d ${hours}h ${minutes}m ${seconds}s until ${nextNakaiyName}`;
-            document.getElementById("raw-longitude").innerText = `${lon.toFixed(5)}°`;
-            document.getElementById("utc-clock").innerText = now.toUTCString().replace("GMT", "UTC");
-
-            // 3. Dynamic atmospheric layout coloring based on current active Monsoon
-            const body = document.getElementById("app-body");
+            // Update Header Monsoon Badge matching actual nature time frame
+            const liveNakaiy = NAKAIY_LIST[exactLiveIndex];
             const badge = document.getElementById("monsoon-badge");
-            const progressFill = document.getElementById("progress-bar");
-            const countdownText = document.getElementById("countdown-text");
+            const body = document.getElementById("app-body");
 
-            if (currentNakaiy.monsoon === "Iruvai") {
+            if (liveNakaiy.monsoon === "Iruvai") {
                 body.className = "bg-[#11100d] text-stone-200 min-h-screen flex flex-col transition-colors duration-1000";
                 badge.className = "px-3 py-1 rounded-full text-xs font-bold tracking-widest bg-amber-500/10 text-amber-400 border border-amber-500/30";
                 badge.innerText = "IRUVAI MONSOON";
-                progressFill.className = "h-full bg-amber-500 rounded-full transition-all duration-1000 ease-out";
-                countdownText.className = "text-sm font-bold text-amber-400";
             } else {
                 body.className = "bg-[#090d16] text-slate-200 min-h-screen flex flex-col transition-colors duration-1000";
                 badge.className = "px-3 py-1 rounded-full text-xs font-bold tracking-widest bg-sky-500/10 text-sky-400 border border-sky-500/30";
                 badge.innerText = "HULHANGU MONSOON";
-                progressFill.className = "h-full bg-sky-500 rounded-full transition-all duration-1000 ease-out";
-                countdownText.className = "text-sm font-bold text-sky-400";
             }
 
-            // Draw the list timeline if it hasn't been instantiated yet
-            if (!document.getElementById("timeline-container").hasChildNodes() || window.lastIndex !== index) {
-                buildTimelineUI(index);
-                window.lastIndex = index;
+            // Populate text elements
+            document.getElementById("nakaiy-name").innerText = displayedNakaiy.name;
+            document.getElementById("nakaiy-desc").innerText = displayedNakaiy.desc;
+            document.getElementById("card-monsoon-badge").innerText = displayedNakaiy.monsoon;
+            document.getElementById("utc-clock").innerText = now.toUTCString().replace("GMT", "UTC");
+
+            // Handle Context Switch: Live Tracking Mode vs Historical Explorer Mode
+            const viewModeIndicator = document.getElementById("view-mode-indicator");
+            const progressContainer = document.getElementById("progress-container");
+            const countdownText = document.getElementById("countdown-text");
+            const timeMetaLabel = document.getElementById("time-meta-label");
+            const longLabel = document.getElementById("longitude-label");
+            const rawLongVal = document.getElementById("raw-longitude");
+
+            if (appState.isTrackingLive) {
+                viewModeIndicator.innerText = "Current Cosmic Alignment";
+                viewModeIndicator.className = "text-xs font-bold tracking-widest text-emerald-400 uppercase";
+                progressContainer.classList.remove("hidden");
+                timeMetaLabel.innerText = "Next Transition:";
+                longLabel.innerText = "Apparent Solar Longitude (λ)";
+                rawLongVal.innerText = `${lon.toFixed(5)}°`;
+
+                // Calculate progress bar filling metrics
+                const progressFraction = (shiftedLon % DEGREES_PER_NAKAIY) / DEGREES_PER_NAKAIY;
+                document.getElementById("progress-text").innerText = `${(progressFraction * 100).toFixed(3)}%`;
+                
+                const fillBar = document.getElementById("progress-bar");
+                fillBar.style.width = `${progressFraction * 100}%`;
+                fillBar.className = displayedNakaiy.monsoon === "Iruvai" ? "h-full bg-amber-500 rounded-full" : "h-full bg-sky-500 rounded-full";
+
+                // Countdown math metrics
+                const degreesRemaining = DEGREES_PER_NAKAIY - (shiftedLon % DEGREES_PER_NAKAIY);
+                const approximateMsRemaining = degreesRemaining * (365.2422 / 360) * 24 * 60 * 60 * 1000;
+                
+                const seconds = Math.floor((approximateMsRemaining / 1000) % 60);
+                const minutes = Math.floor((approximateMsRemaining / (1000 * 60)) % 60);
+                const hours = Math.floor((approximateMsRemaining / (1000 * 60 * 60)) % 24);
+                const days = Math.floor(approximateMsRemaining / (1000 * 60 * 60 * 24));
+                
+                const nextIndex = (exactLiveIndex + 1) % 27;
+                countdownText.innerText = `${days}d ${hours}h ${minutes}m ${seconds}s until ${NAKAIY_LIST[nextIndex].name}`;
+                countdownText.className = displayedNakaiy.monsoon === "Iruvai" ? "text-sm font-bold text-amber-400" : "text-sm font-bold text-sky-400";
+            } else {
+                // Archive Explorer Mode styling
+                viewModeIndicator.innerText = "Historical Archive View";
+                viewModeIndicator.className = "text-xs font-bold tracking-widest text-slate-400 uppercase";
+                progressContainer.classList.add("hidden");
+                timeMetaLabel.innerText = "System Coordinates:";
+                
+                // Show structural span boundaries instead of live positions
+                const startAngle = (targetIndex * DEGREES_PER_NAKAIY + ASSIDHA_START_LONGITUDE) % 360;
+                const endAngle = ((targetIndex + 1) * DEGREES_PER_NAKAIY + ASSIDHA_START_LONGITUDE) % 360;
+                
+                longLabel.innerText = "Current Real-Time Position (λ)";
+                rawLongVal.innerText = `${lon.toFixed(4)}° (Live Now)`;
+                
+                countdownText.innerText = `Occupies solar arc from ${startAngle.toFixed(2)}° to ${endAngle.toFixed(2)}°`;
+                countdownText.className = "text-sm font-semibold text-slate-400";
+            }
+
+            // Sync structural loop checks
+            if (!document.getElementById("timeline-container").hasChildNodes()) {
+                buildTimelineUI(targetIndex);
             }
         }
 
-        // Initialize execution loops
-        updateEngine();
-        setInterval(updateEngine, 1000);
+        // Attach layout core handlers
+        document.getElementById("reset-to-now").onclick = resetToLiveTracking;
+
+        // Run application processing triggers
+        updateDisplay();
+        setInterval(updateDisplay, 1000);
     </script>
 </body>
 </html>

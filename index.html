@@ -141,6 +141,15 @@
 
             return lambda;
         }
+        function calculateInitialIndices() {
+    const initialLon = getSunEclipticLongitude(new Date());
+    let initialShifted = initialLon - ASSIDHA_START_LONGITUDE;
+    if (initialShifted < 0) initialShifted += 360;
+    
+    const initialIndex = Math.floor(initialShifted / DEGREES_PER_NAKAIY);
+    appState.liveCurrentIndex = initialIndex;
+    appState.selectedNakaiyIndex = initialIndex;
+}
 
         function handleNakaiyClick(clickedIndex) {
             if (clickedIndex === appState.liveCurrentIndex) {

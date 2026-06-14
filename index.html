@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nakaiy • Solar Astronomical Engine</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&display=swap');
+        body { font-family: 'JetBrains+Mono', monospace; }
+    </style>
+</head>
+<body id="app-body" class="bg-[#0f172a] text-slate-200 min-h-screen flex flex-col transition-colors duration-1000">
+
+    <header class="border-b border-slate-800 p-6 flex justify-between items-center max-w-5xl w-full mx-auto">
+        <div class="space-y-1">
+            <h1 class="text-xl font-bold tracking-wider text-white">NAKAIY ENGINE</h1>
+            <p class="text-xs text-slate-400">Pure Solar Tracking • No Gregorian Hardcoding</p>
+        </div>
+        <span id="monsoon-badge" class="px-3 py-1 rounded-full text-xs font-bold tracking-widest transition-all duration-1000">
+            LOADING...
+        </span>
+    </header>
+
+    <main class="flex-1 max-w-5xl w-full mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-6 my-4">
+        
+        <section class="md:col-span-2 space-y-6 flex flex-col justify-between">
+            
+            <div class="bg-slate-900/40 border border-slate-800 rounded-xl p-8 space-y-6 backdrop-blur-sm">
+                <div class="space-y-1">
+                    <span class="text-xs font-bold tracking-widest text-slate-400 uppercase">Current Position</span>
+                    <div id="nakaiy-name" class="text-5xl font-extrabold tracking-tight text-white py-2">--</div>
+                </div>
+
+                <div class="space-y-2">
+                    <div class="flex justify-between text-xs font-semibold text-slate-400">
+                        <span>Nakaiy Progress</span>
+                        <span id="progress-text">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                        <div id="progress-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
+                    </div>
+                </div>
+
+                <div class="pt-4 border-t border-slate-800/60 flex flex-col sm:flex-row sm:justify-between gap-2">
+                    <span class="text-sm text-slate-400">Next Transition:</span>
+                    <span id="countdown-text" class="text-sm font-bold text-emerald-400">Calculating cosmic boundaries...</span>
+                </div>
+            </div>
+
+            <div class="bg-slate-950/40 border border-dashed border-slate-800 rounded-xl p-6 space-y-3">
+                <h3 class="text-xs font-bold tracking-wider text-slate-400 uppercase">Astronomical Ephemeris Data</h3>
+                <div class="grid grid-cols-2 gap-4 text-xs">
+                    <div>
+                        <p class="text-slate-500">Apparent Solar Longitude (λ)</p>
+                        <p id="raw-longitude" class="font-bold text-slate-300 mt-1">0.0000°</p>
+                    </div>
+                    <div>
+                        <p class="text-slate-500">Universal Time (UTC Clock)</p>
+                        <p id="utc-clock" class="font-bold text-slate-300 mt-1">--:--:-- UTC</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="bg-slate-900/20 border border-slate-800/80 rounded-xl p-6 flex flex-col h-[70vh]">
+            <h3 class="text-xs font-bold tracking-wider text-slate-400 uppercase mb-4 pb-2 border-b border-slate-800">
+                The 27 Celestial Constellations
+            </h3>
+            <div id="timeline-container" class="flex-1 overflow-y-auto space-y-2 pr-2 scrollbar-thin scrollbar-thumb-slate-800">
+                </div>
+        </section>
+    </main>
+
+    <footer class="text-center p-6 border-t border-slate-900 text-[10px] text-slate-500">
+        Engine computes orbital longitude relative to the Vernal Equinox ($0^\circ$). Derived from ancient Maldivian seasonal observation cycles.
+    </footer>
+
+    <script>
+        const NAKAIY_LIST = [
+            { name: "Assidha", monsoon: "Hulhangu" }, { name: "Burunu", monsoon: "Hulhangu" },
+            { name: "Kethi", monsoon: "Hulhangu" },   { name: "Roanu", monsoon: "Hulhangu" },
+            { name: "Miyahelia", monsoon: "Hulhangu" },{ name: "Adha", monsoon: "Hulhangu" },
+            { name: "Funoas", monsoon: "Hulhangu" },   { name: "Fus", monsoon: "Hulhangu" },
+            { name: "Ahuliha", monsoon: "Hulhangu" }, { name: "Maa", monsoon: "Hulhangu" },
+            { name: "Fura", monsoon: "Hulhangu" },    { name: "Uthura", monsoon: "Hulhangu" },
+            { name: "Atha", monsoon: "Hulhangu" },    { name: "Hitha", monsoon: "Hulhangu" },
+            { name: "Hey", monsoon: "Hulhangu" },     { name: "Viha", monsoon: "Hulhangu" },
+            { name: "Nora", monsoon: "Hulhangu" },    { name: "Dosha", monsoon: "Hulhangu" },
+            { name: "Mula", monsoon: "Iruvai" },      { name: "Furahalha", monsoon: "Iruvai" },
+            { name: "Uthurahalha", monsoon: "Iruvai" },{ name: "Huvan", monsoon: "Iruvai" },
+            { name: "Dhinasha", monsoon: "Iruvai" },  { name: "Hiyaviha", monsoon: "Iruvai" },
+            { name: "Furabadhuruva", monsoon: "Iruvai" },{ name: "Fasbadhuruva", monsoon: "Iruvai" },
+            { name: "Reyva", monsoon: "Iruvai" }
+        ];
+
+        const DEGREES_PER_NAKAIY = 360 / 27; // Exactly 13.333333°
+        const ASSIDHA_START_LONGITUDE = 18.0; // The solar angle offset when Assidha begins
+
+        function getSunEclipticLongitude(date) {
+            const timeMs = date.getTime();
+            const j2000 = 946728000000; // Julian epoch Jan 1, 2000 12:00 UTC
+            const D = (timeMs - j2000) / 86400000;
+
+            let q = (280.459 + 0.98564736 * D) % 360;
+            let g = (357.529 + 0.98560028 * D) % 360;
+            
+            if (q < 0) q += 360;
+            if (g < 0) g += 360;
+
+            const gRad = g * Math.PI / 180;
+            let lambda = q + 1.915 * Math.sin(gRad) + 0.020 * Math.sin(2 * gRad);
+            lambda = lambda % 360;
+            if (lambda < 0) lambda += 360;
+
+            return lambda;
+        }
+
+        function buildTimelineUI(currentIndex) {
+            const container = document.getElementById("timeline-container");
+            container.innerHTML = ""; // Clear out stale markup
+
+            NAKAIY_LIST.forEach((nakaiy, index) => {
+                const row = document.createElement("div");
+                row.className = `flex justify-between items-center text-xs p-2.5 rounded-lg border transition-all duration-300 ${
+                    index === currentIndex 
+                    ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-300 font-bold shadow-sm" 
+                    : "bg-slate-900/20 border-slate-800/40 text-slate-500"
+                }`;
+                
+                row.innerHTML = `
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full ${index === currentIndex ? 'bg-emerald-400 animate-pulse' : 'bg-transparent'}"></span>
+                        <span>${nakaiy.name}</span>
+                    </div>
+                    <span class="text-[10px] uppercase tracking-wider scale-90 ${nakaiy.monsoon === 'Iruvai' ? 'text-amber-500/60' : 'text-sky-500/60'}">${nakaiy.monsoon}</span>
+                `;
+                container.appendChild(row);
+                
+                // Automatically keep active items scrolled into readable view frame
+                if(index === currentIndex && !container.dataset.scrolled) {
+                    setTimeout(() => row.scrollIntoView({ block: "center", behavior: "smooth" }), 200);
+                    container.dataset.scrolled = "true";
+                }
+            });
+        }
+
+        function updateEngine() {
+            const now = new Date();
+            const lon = getSunEclipticLongitude(now);
+            
+            // Re-center frame of reference to match the astronomical offset
+            let shiftedLon = lon - ASSIDHA_START_LONGITUDE;
+            if (shiftedLon < 0) shiftedLon += 360;
+            
+            const index = Math.floor(shiftedLon / DEGREES_PER_NAKAIY);
+            const progressFraction = (shiftedLon % DEGREES_PER_NAKAIY) / DEGREES_PER_NAKAIY;
+            const currentNakaiy = NAKAIY_LIST[index];
+
+            // 1. Calculate dynamic countdown to next transition point
+            const degreesRemaining = DEGREES_PER_NAKAIY - (shiftedLon % DEGREES_PER_NAKAIY);
+            const approximateMsRemaining = degreesRemaining * (365.2422 / 360) * 24 * 60 * 60 * 1000;
+            
+            const seconds = Math.floor((approximateMsRemaining / 1000) % 60);
+            const minutes = Math.floor((approximateMsRemaining / (1000 * 60)) % 60);
+            const hours = Math.floor((approximateMsRemaining / (1000 * 60 * 60)) % 24);
+            const days = Math.floor(approximateMsRemaining / (1000 * 60 * 60 * 24));
+
+            const nextIndex = (index + 1) % 27;
+            const nextNakaiyName = NAKAIY_LIST[nextIndex].name;
+
+            // 2. Render calculations dynamically out to DOM elements
+            document.getElementById("nakaiy-name").innerText = currentNakaiy.name;
+            document.getElementById("progress-text").innerText = `${(progressFraction * 100).toFixed(4)}%`;
+            document.getElementById("progress-bar").style.width = `${progressFraction * 100}%`;
+            document.getElementById("countdown-text").innerText = `${days}d ${hours}h ${minutes}m ${seconds}s until ${nextNakaiyName}`;
+            document.getElementById("raw-longitude").innerText = `${lon.toFixed(5)}°`;
+            document.getElementById("utc-clock").innerText = now.toUTCString().replace("GMT", "UTC");
+
+            // 3. Dynamic atmospheric layout coloring based on current active Monsoon
+            const body = document.getElementById("app-body");
+            const badge = document.getElementById("monsoon-badge");
+            const progressFill = document.getElementById("progress-bar");
+            const countdownText = document.getElementById("countdown-text");
+
+            if (currentNakaiy.monsoon === "Iruvai") {
+                body.className = "bg-[#11100d] text-stone-200 min-h-screen flex flex-col transition-colors duration-1000";
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold tracking-widest bg-amber-500/10 text-amber-400 border border-amber-500/30";
+                badge.innerText = "IRUVAI MONSOON";
+                progressFill.className = "h-full bg-amber-500 rounded-full transition-all duration-1000 ease-out";
+                countdownText.className = "text-sm font-bold text-amber-400";
+            } else {
+                body.className = "bg-[#090d16] text-slate-200 min-h-screen flex flex-col transition-colors duration-1000";
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold tracking-widest bg-sky-500/10 text-sky-400 border border-sky-500/30";
+                badge.innerText = "HULHANGU MONSOON";
+                progressFill.className = "h-full bg-sky-500 rounded-full transition-all duration-1000 ease-out";
+                countdownText.className = "text-sm font-bold text-sky-400";
+            }
+
+            // Draw the list timeline if it hasn't been instantiated yet
+            if (!document.getElementById("timeline-container").hasChildNodes() || window.lastIndex !== index) {
+                buildTimelineUI(index);
+                window.lastIndex = index;
+            }
+        }
+
+        // Initialize execution loops
+        updateEngine();
+        setInterval(updateEngine, 1000);
+    </script>
+</body>
+</html>

@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="dv" dir="rtl">
+<html lang="dv" dir="rtl" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ނަކަތް އިރުވަރު - އިރުގެ މަޤާމުން މޫސުން ބަލާ ނަކަތު ކަލަންޑަރު</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>ނަކަތް އިރުވަރު • ނަކަތް ސޯލާ އިންޖީނު</title>
+    <!-- Tailwind CSS Engine -->
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         
         @font-face {
             font-family: 'Faagathi Dheli';
@@ -24,114 +25,122 @@
         }
 
         html {
-            font-size: 55px;
-            line-height: 1.5;
-            /* Prevents blue tap highlights on mobile screens */
+            font-size: 48px;
             -webkit-tap-highlight-color: transparent;
+            height: 100%;
         }
 
         body { 
             font-family: 'Faagathi Dheli', 'Inter', sans-serif; 
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
+            height: 100%;
         }
         
+        /* Enforce structured direction layout metrics purely on Latin metrics */
         .numeric-data { 
-            font-family: 'Inter', monospace; 
+            font-family: 'Inter', sans-serif; 
             direction: ltr; 
             text-align: left; 
         }
-
-        /* Custom minimal scrollbar styling for mobile panels */
-        .custom-scroll::-webkit-scrollbar { width: 4px; }
-        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
-        .custom-scroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 99px; }
+        /* Hide default native scrollbars across submenus */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body id="app-body" class="bg-[#0f172a] text-slate-200 min-h-screen flex flex-col justify-between overflow-x-hidden safe-bottom pb-16 md:pb-0 transition-colors duration-1000">
+<body id="app-body" class="bg-[#090d16] text-slate-200 flex flex-col justify-between overflow-hidden transition-colors duration-1000 select-none">
 
-    <header class="sticky top-0 z-40 bg-slate-950/80 backdrop-blur-md border-b border-slate-900 px-4 py-3 flex justify-between items-center w-full max-w-5xl mx-auto">
-        <div class="space-y-0.5">
-  <h1 class="text-5xl font-bold tracking-wider text-white">ނަކަތް އިރުވަރު</h1>
-            <p class="text-4xl text-slate-400">އިރުގެ މަގާމުން މޫސުން ބަލާ ނަކަތު ކަލަންޑަރު</p>
+    <!-- Top Native-Style Navigation Bar Container -->
+    <header class="w-full bg-slate-950/40 border-b border-slate-900/60 backdrop-blur-xl px-2 pt-2 pb-0 flex justify-between items-center z-40 shrink-0">
+        <div class="space-y-0.1">
+            <h1 class="text-xl font-normal text-emerald-400 tracking-wide">ނަކަތް އިރުވަރު</h1>
+            <p class="text-sm text-slate-200 font-light">އިރުގެ މަގާމުން މޫސުން ބަލާ ކަލަންޑަރު</p>
         </div>
         <div class="flex items-center gap-2">
-            <button id="reset-to-now" class="hidden text-[11px] bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-2.5 py-1 rounded-md transition-all cursor-pointer">
+            <button id="reset-to-now" class="hidden text-sm bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full transition-all active:scale-95 cursor-pointer">
                 ⌂ މިހާރު
             </button>
-            <span id="monsoon-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider transition-all duration-1000">
+            <span id="monsoon-badge" class="px-1 py-1 rounded-sm text-sm font-medium tracking-wide transition-all duration-1000 shadow-sm">
                 ...
             </span>
         </div>
     </header>
 
-    <main class="flex-1 w-full max-w-5xl mx-auto p-4 md:grid md:grid-cols-3 md:gap-6 items-start">
+    <!-- Dynamic Central Frame Component Viewport -->
+    <main class="flex-1 w-full max-w-xl mx-auto overflow-y-auto no-scrollbar p-2 space-y-2">
         
-        <div id="view-dashboard" class="space-y-4 md:col-span-2 block">
+        <!-- Viewport A: Dashboard Panel Grid Content wrapper -->
+        <div id="view-dashboard" class="space-y-5 block animate-fade-in">
             
-            <div class="bg-slate-900/30 border border-slate-900 rounded-2xl p-6 space-y-5 backdrop-blur-sm">
-                <div class="flex justify-between items-start">
-                    <div class="space-y-0.5">
-                        <span id="view-mode-indicator" class="text-[10px] font-bold tracking-widest text-slate-400 uppercase">މިހާރުގެ މަގާމު</span>
-                        <div id="nakaiy-name" class="text-4xl font-normal tracking-tight text-white py-1">--</div>
+            <!-- Hero Information Identity Viewport Card Component -->
+            <div class="bg-gradient-to-b from-slate-900/50 to-slate-900/20 border border-slate-900 rounded-sm p-1 space-y-0 shadow-xl backdrop-blur-md mb-1">
+                <div class="flex justify-between items-center">
+                    <div class="space-y-1">
+                        <span id="view-mode-indicator" class="text-sm font-bold tracking-widest text-slate-400 uppercase">މިހާރުގެ މަގާމު</span>
+                        <div id="nakaiy-name" class="text-xl font-normal text-white py-1">--</div>
                     </div>
-                    <span id="card-monsoon-badge" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-900 text-slate-400 border border-slate-800">--</span>
+                    <span id="card-monsoon-badge" class="text-sm font-medium uppercase tracking-wider px-2 py-0 rounded-sm bg-slate-950/80 text-slate-400 border border-slate-900/80">--</span>
                 </div>
 
+                <!-- Text Description Container Segment block -->
                 <div class="space-y-1">
-                    <p id="nakaiy-desc" class="text-sm font-light text-slate-300 leading-relaxed bg-slate-950/20 p-4 rounded-xl border border-slate-900">
+                    <p id="nakaiy-desc" class="text-lg font-light text-slate-300 leading-tight text-justify bg-slate-700/20 p-0.5 rounded-sm border border-slate-950">
                         ލޯޑުވަނީ...
                     </p>
                 </div>
 
-                <div id="progress-container" class="space-y-1.5">
-                    <div class="flex justify-between text-[11px] font-semibold text-slate-400">
+                <!-- Custom Minimal Progress Bar Widget Track -->
+                <div id="progress-container" class="space-y-0">
+                    <div class="flex justify-between text-sm font-medium text-slate-400">
                         <span>ނަކަތް ހިނގަމުންދާ މިންވަރު</span>
-                        <span id="progress-text" class="numeric-data">0%</span>
+                        <span id="progress-text" class="numeric-data font-semibold text-[20px] pt-1">0%</span>
                     </div>
-                    <div class="w-full bg-slate-900 h-1.5 rounded-full overflow-hidden">
+                    <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden p-0.5 border border-slate-900">
                         <div id="progress-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
                     </div>
                 </div>
 
-                <div class="pt-3 border-t border-slate-900/60 flex flex-col gap-1">
-                    <span id="time-meta-label" class="text-[11px] text-slate-400">ދެން ނަކަތް ބަދަލުވާނީ:</span>
-                    <span id="countdown-text" class="text-sm font-bold text-emerald-400">ހިސާބުކުރަނީ...</span>
+                <!-- Live Transition Counter Metric Block Layout -->
+                <div class="pt-1 border-t border-slate-900/80 flex flex-col gap-0.5">
+                    <span id="time-meta-label" class="text-sm font-medium text-slate-400">ދެން ނަކަތް ބަދަލުވާނީ:</span>
+                    <div id="countdown-text" class="text-sm font-medium text-emerald-400">ހިސާބުކުރަނީ...</div>
                 </div>
             </div>
 
-            <div class="bg-slate-950/20 border border-dashed border-slate-900 rounded-xl p-4 grid grid-cols-2 gap-4 text-xs">
-                <div>
-                    <p id="longitude-label" class="text-slate-500 text-[10px]">އިރުގެ މަގާމު (λ)</p>
-                    <p id="raw-longitude" class="font-bold text-slate-400 mt-0.5 numeric-data">0.0000°</p>
+            <!-- Ephemeris Logging Metrics Container Widget layout -->
+            <div class="bg-slate-950/40 border border-slate-900 rounded-sm p-2 grid grid-cols-2 gap-0">
+                <div class="space-y-1">
+                    <p id="longitude-label" class="text-slate-500 text-xs uppercase font-medium">އިރުގެ މަގާމު</p>
+                    <p id="raw-longitude" class="font-semibold text-slate-300 numeric-data text-[18px]">0.0000°</p>
                 </div>
-                <div>
-                    <p class="text-slate-500 text-[10px]">ބައިނަލްއަޤްވާމީ ގަޑި (UTC)</p>
-                    <p id="utc-clock" class="font-bold text-slate-400 mt-0.5 numeric-data">--:--:--</p>
+                <div class="space-y-1">
+                    <p class="text-slate-500 text-xs uppercase font-medium">ބައިނަލްއަޤްވާމީ ގަޑި</p>
+                    <p id="utc-clock" class="text-slate-300 numeric-data text-[18px]">--:--:--</p>
                 </div>
             </div>
         </div>
 
-        <div id="view-timeline" class="hidden md:block md:col-span-1 bg-slate-900/10 md:border md:border-slate-900 rounded-2xl p-4 md:h-[75vh] flex flex-col">
-            <h3 class="hidden md:block text-[48px] font-bold tracking-wider text-slate-400 uppercase mb-3 pb-2 border-b border-slate-900">
-                27 ނަކަތުގެ ތަރުތީބު
-            </h3>
-            <div id="timeline-container" class="flex-1 overflow-y-auto space-y-1.5 pr-1 custom-scroll max-h-[70vh] md:max-h-none">
-                </div>
+        <!-- Viewport B: Interactive Timeline Exploration View panel container layout -->
+        <div id="view-timeline" class="hidden space-y-3 pb-6 animate-fade-in">
+            <div id="timeline-container" class="space-y-2.5">
+                <!-- Programmatically rendered lists mapped straight into active DOM view structure -->
+            </div>
         </div>
     </main>
 
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-slate-950/95 border-t border-slate-900 flex justify-around items-center py-2 backdrop-blur-lg">
-        <button id="tab-btn-dash" type="button" class="flex flex-col items-center justify-center text-emerald-400 transition-colors w-1/2 py-1 cursor-pointer">
-            <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
-            <span class="text-[10px]">މިހާރު</span>
+    <!-- Persistent Floating App Navigation Menu Footer Track -->
+    <nav class="w-full bg-slate-950/80 border-t border-slate-900/60 backdrop-blur-2xl flex justify-around items-center py-2 px-6 pb-5 shrink-0 z-40">
+        <button id="tab-btn-dash" type="button" class="flex flex-col items-center justify-center text-emerald-400 transition-all duration-300 scale-100 active:scale-95 w-1/2 py-1 cursor-pointer">
+            <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+            <span class="text-sm font-medium tracking-wide">މިހާރު</span>
         </button>
-        <button id="tab-btn-time" type="button" class="flex flex-col items-center justify-center text-slate-500 transition-colors w-1/2 py-1 cursor-pointer">
-            <svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-            <span class="text-[10px]">ހުރިހާ ނަކަތްތައް</span>
+        <button id="tab-btn-time" type="button" class="flex flex-col items-center justify-center text-slate-500 transition-all duration-300 scale-100 active:scale-95 w-1/2 py-1 cursor-pointer">
+            <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            <span class="text-sm font-medium tracking-wide">ހުރިހާ ނަކަތްތައް</span>
         </button>
     </nav>
 
+    <!-- JavaScript Execution Engine Context -->
     <script>
         const DEGREES_PER_NAKAIY = 360 / 27; 
         const ASSIDHA_START_LONGITUDE = 18.0;
@@ -143,13 +152,13 @@
             selectedNakaiyIndex: 0,
             liveCurrentIndex: -1, 
             hasInitialScrollFocused: false,
-            currentActiveTab: 'dashboard' // 'dashboard' or 'timeline'
+            currentActiveTab: 'dashboard'
         };
 
         async function initializeEngine() {
             try {
                 const response = await fetch('./nakaiy-data.json');
-                if (!response.ok) throw new Error('Network error loading data asset profile.');
+                if (!response.ok) throw new Error('Data endpoint load fault.');
                 NAKAIY_LIST = await response.json();
                 
                 calculateInitialIndices();
@@ -195,11 +204,7 @@
             
             buildTimelineUI(clickedIndex);
             updateDisplay();
-
-            // Mobile view adjustment: snap view container frame focus back to active presentation template
-            if (window.innerWidth < 768) {
-                switchMobileTab('dashboard');
-            }
+            switchMobileTab('dashboard');
         }
 
         function resetToLiveTracking() {
@@ -223,28 +228,21 @@
                 row.type = "button";
                 row.onclick = () => handleNakaiyClick(index);
                 
-                row.className = `w-full text-right flex justify-between items-center text-xs p-3 rounded-xl border transition-all duration-200 cursor-pointer ${
+                row.className = `w-full text-right flex justify-between items-center p-4 rounded-2xl border transition-all duration-200 cursor-pointer ${
                     isSelected 
-                    ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-300 font-bold shadow-sm" 
-                    : "bg-slate-900/30 border-slate-900/60 text-slate-400 hover:border-slate-800"
+                    ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-300 font-medium shadow-md" 
+                    : "bg-slate-900/30 border-slate-900/40 text-slate-400 active:bg-slate-900/60"
                 }`;
                 
                 row.innerHTML = `
-                    <div class="flex items-center gap-2">
-                        <span class="w-1.5 h-1.5 rounded-full ${isActualLiveNow ? 'bg-emerald-400 animate-pulse' : 'bg-transparent'}"></span>
-                        <span class="${isSelected ? 'text-white font-normal text-sm' : ''}">${nakaiy.name}</span>
-                        ${isActualLiveNow ? '<span class="text-[9px] bg-emerald-500/20 text-emerald-400 px-1 rounded mr-2">މިހާރު</span>' : ''}
+                    <div class="flex items-center gap-3">
+                        <span class="w-2 h-2 rounded-full ${isActualLiveNow ? 'bg-emerald-400 animate-pulse' : 'bg-transparent'}"></span>
+                        <span class="${isSelected ? 'text-white text-base' : 'text-sm'}">${nakaiy.name}</span>
+                        ${isActualLiveNow ? '<span class="text-[9px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full mr-2 font-medium">މިހާރު</span>' : ''}
                     </div>
-                    <span class="text-[10px] uppercase tracking-wider ${nakaiy.monsoon === 'އިރުވައި' ? 'text-amber-500/60' : 'text-sky-500/60'}">${nakaiy.monsoon}</span>
+                    <span class="text-sm tracking-wide px-2.5 py-0.5 rounded-full bg-slate-950/40 ${nakaiy.monsoon === 'އިރުވައި' ? 'text-amber-500/60 border border-amber-500/10' : 'text-sky-500/60 border border-sky-500/10'}">${nakaiy.monsoon}</span>
                 `;
                 container.appendChild(row);
-                
-                if (isSelected && !appState.hasInitialScrollFocused) {
-                    setTimeout(() => {
-                        row.scrollIntoView({ block: "center", behavior: "smooth" });
-                        appState.hasInitialScrollFocused = true;
-                    }, 300);
-                }
             });
         }
 
@@ -275,19 +273,19 @@
             const body = document.getElementById("app-body");
 
             if (liveNakaiy.monsoon === "އިރުވައި") {
-                body.className = "bg-[#0f0e0b] text-stone-200 min-h-screen flex flex-col justify-between overflow-x-hidden safe-bottom pb-16 md:pb-0 transition-colors duration-1000";
-                badge.className = "px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/10 text-amber-400 border border-amber-500/30";
+                body.className = "bg-[#0b0a07] text-stone-200 flex flex-col justify-between overflow-hidden transition-colors duration-1000 select-none h-full";
+                badge.className = "px-1 py-1 rounded-sm text-sm font-medium bg-amber-500/10 text-amber-400 border border-amber-500/20 invisible";
                 badge.innerText = "އިރުވައި";
             } else {
-                body.className = "bg-[#060910] text-slate-200 min-h-screen flex flex-col justify-between overflow-x-hidden safe-bottom pb-16 md:pb-0 transition-colors duration-1000";
-                badge.className = "px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-sky-500/10 text-sky-400 border border-sky-500/30";
+                body.className = "bg-[#06080f] text-slate-200 flex flex-col justify-between overflow-hidden transition-colors duration-1000 select-none h-full";
+                badge.className = "px-1 py-0 rounded-sm text-sm font-medium bg-sky-500/10 text-sky-400 border border-sky-500/20 invisible";
                 badge.innerText = "ހުޅަނގު";
             }
 
             document.getElementById("nakaiy-name").innerText = displayedNakaiy.name;
             document.getElementById("nakaiy-desc").innerText = displayedNakaiy.desc;
             document.getElementById("card-monsoon-badge").innerText = displayedNakaiy.monsoon;
-            document.getElementById("utc-clock").innerText = now.toUTCString().replace("GMT", "UTC").slice(17, 25) + " UTC";
+            document.getElementById("utc-clock").innerText = now.toUTCString().replace("GMT", "UTC").slice(17, 25);
 
             const viewModeIndicator = document.getElementById("view-mode-indicator");
             const progressContainer = document.getElementById("progress-container");
@@ -298,10 +296,10 @@
 
             if (appState.isTrackingLive) {
                 viewModeIndicator.innerText = "މިހާރުގެ ފަލަކީ މަގާމު";
-                viewModeIndicator.className = "text-[10px] font-bold tracking-widest text-emerald-400 uppercase";
+                viewModeIndicator.className = "text-xs tracking-widest text-emerald-400";
                 progressContainer.classList.remove("hidden");
                 timeMetaLabel.innerText = "ދެން ނަކަތް ބަދަލުވާނީ:";
-                longLabel.innerText = "އިރުގެ މަގާމު (λ)";
+                longLabel.innerText = "އިރުގެ މަގާމު";
                 rawLongVal.innerText = `${lon.toFixed(4)}°`;
 
                 const progressFraction = (shiftedLon % DEGREES_PER_NAKAIY) / DEGREES_PER_NAKAIY;
@@ -309,7 +307,7 @@
                 
                 const fillBar = document.getElementById("progress-bar");
                 fillBar.style.width = `${progressFraction * 100}%`;
-                fillBar.className = displayedNakaiy.monsoon === "އިރުވައި" ? "h-full bg-amber-500 rounded-full" : "h-full bg-sky-500 rounded-full";
+                fillBar.className = displayedNakaiy.monsoon === "އިރުވައި" ? "h-full bg-amber-500 rounded-full" : "h-full bg-sky-500/40 rounded-full";
 
                 const degreesRemaining = DEGREES_PER_NAKAIY - (shiftedLon % DEGREES_PER_NAKAIY);
                 const approximateMsRemaining = degreesRemaining * (365.2422 / 360) * 24 * 60 * 60 * 1000;
@@ -320,11 +318,11 @@
                 const days = Math.floor(approximateMsRemaining / (1000 * 60 * 60 * 24));
                 
                 const nextIndex = (exactLiveIndex + 1) % 27;
-                countdownText.innerText = `${days}ދުވަސް ${hours}ގަޑިއިރު ${minutes}މިނެޓު ${seconds}ސިކުންތުުން ${NAKAIY_LIST[nextIndex].name} ނަކަތަށް`;
-                countdownText.className = displayedNakaiy.monsoon === "އިރުވައި" ? "text-sm font-bold text-amber-400" : "text-sm font-bold text-sky-400";
+                countdownText.innerHTML = `<span class="numeric-data text-[18px]">${days}d ${hours}h ${minutes}m ${seconds}s</span> <span class="text-sm text-slate-400">ކުރިއަށް އޮތީ ${NAKAIY_LIST[nextIndex].name}</span>`;
+                countdownText.className = displayedNakaiy.monsoon === "އިރުވައި" ? "text-sm font-medium text-amber-400" : "text-sm font-medium text-sky-400/40";
             } else {
                 viewModeIndicator.innerText = "ތާރީޚީ އަރުޝީފު ބެލުން";
-                viewModeIndicator.className = "text-[10px] font-bold tracking-widest text-slate-400 uppercase";
+                viewModeIndicator.className = "text-xs tracking-widest text-emerald-400";
                 progressContainer.classList.add("hidden");
                 timeMetaLabel.innerText = "ނަކަތުގެ ބޮޑުމިން:";
                 
@@ -349,21 +347,20 @@
             if (targetTab === 'dashboard') {
                 dashEl.classList.replace("hidden", "block");
                 timeEl.classList.replace("block", "hidden");
-                btnDash.className = "flex flex-col items-center justify-center text-emerald-400 w-1/2 py-1";
-                btnTime.className = "flex flex-col items-center justify-center text-slate-500 w-1/2 py-1";
+                btnDash.className = "flex flex-col items-center justify-center text-emerald-400 w-1/2 py-1 cursor-pointer";
+                btnTime.className = "flex flex-col items-center justify-center text-slate-500 w-1/2 py-1 cursor-pointer";
             } else {
                 dashEl.classList.replace("block", "hidden");
                 timeEl.classList.replace("hidden", "block");
-                btnDash.className = "flex flex-col items-center justify-center text-slate-500 w-1/2 py-1";
-                btnTime.className = "flex flex-col items-center justify-center text-emerald-400 w-1/2 py-1";
+                btnDash.className = "flex flex-col items-center justify-center text-slate-500 w-1/2 py-1 cursor-pointer";
+                btnTime.className = "flex flex-col items-center justify-center text-emerald-400 w-1/2 py-1 cursor-pointer";
                 
-                // Force timeline view window container to scroll and center on currently selected node
                 setTimeout(() => {
                     const container = document.getElementById("timeline-container");
                     const activeIndex = appState.isTrackingLive ? appState.liveCurrentIndex : appState.selectedNakaiyIndex;
                     const activeRow = container.children[activeIndex];
-                    if (activeRow) activeRow.scrollIntoView({ block: "center" });
-                }, 50);
+                    if (activeRow) activeRow.scrollIntoView({ block: "center", behavior: "smooth" });
+                }, 80);
             }
         }
 

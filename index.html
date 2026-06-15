@@ -70,21 +70,21 @@
     <main class="flex-1 w-full max-w-xl mx-auto overflow-y-auto no-scrollbar p-2 space-y-2">
         
         <!-- Viewport A: Dashboard Panel Grid Content wrapper -->
-        <div id="view-dashboard" class="space-y-5 block animate-fade-in">
+        <div id="view-dashboard" class="space-y-0 block animate-fade-in mb-0">
             
             <!-- Hero Information Identity Viewport Card Component -->
             <div class="bg-gradient-to-b from-slate-900/50 to-slate-900/20 border border-slate-900 rounded-sm p-1 space-y-0 shadow-xl backdrop-blur-md mb-1">
                 <div class="flex justify-between items-center">
-                    <div class="space-y-1">
+                    <div class="space-y-0">
                         <span id="view-mode-indicator" class="text-sm font-bold tracking-widest text-slate-400 uppercase">މިހާރުގެ މަގާމު</span>
-                        <div id="nakaiy-name" class="text-xl font-normal text-white py-1">--</div>
+                        <div id="nakaiy-name" class="text-xl font-normal text-white py-0">--</div>
                     </div>
                     <span id="card-monsoon-badge" class="text-sm font-medium uppercase tracking-wider px-2 py-0 rounded-sm bg-slate-950/80 text-slate-400 border border-slate-900/80">--</span>
                 </div>
 
                 <!-- Text Description Container Segment block -->
                 <div class="space-y-1">
-                    <p id="nakaiy-desc" class="text-lg font-light text-slate-300 leading-tight text-justify bg-slate-700/20 p-0.5 rounded-sm border border-slate-950">
+                    <p id="nakaiy-desc" class="text-lg font-light text-slate-300 leading-tight text-justify bg-slate-700/20 p-1 rounded-sm border border-slate-950">
                         ލޯޑުވަނީ...
                     </p>
                 </div>
@@ -95,13 +95,13 @@
                         <span>ނަކަތް ހިނގަމުންދާ މިންވަރު</span>
                         <span id="progress-text" class="numeric-data font-semibold text-[20px] pt-1">0%</span>
                     </div>
-                    <div class="w-full bg-slate-950 h-2 rounded-full overflow-hidden p-0.5 border border-slate-900">
+                    <div class="w-full bg-slate-950 h-1 rounded-full overflow-hidden p-0 border border-slate-900">
                         <div id="progress-bar" class="h-full bg-emerald-500 rounded-full transition-all duration-1000 ease-out" style="width: 0%"></div>
                     </div>
                 </div>
 
                 <!-- Live Transition Counter Metric Block Layout -->
-                <div class="pt-1 border-t border-slate-900/80 flex flex-col gap-0.5">
+                <div class="pt-1 border-t border-slate-900/80 flex flex-col gap-0">
                     <span id="time-meta-label" class="text-sm font-medium text-slate-400">ދެން ނަކަތް ބަދަލުވާނީ:</span>
                     <div id="countdown-text" class="text-sm font-medium text-emerald-400">ހިސާބުކުރަނީ...</div>
                 </div>
@@ -109,11 +109,11 @@
 
             <!-- Ephemeris Logging Metrics Container Widget layout -->
             <div class="bg-slate-950/40 border border-slate-900 rounded-sm p-2 grid grid-cols-2 gap-0">
-                <div class="space-y-1">
+                <div class="space-y-0">
                     <p id="longitude-label" class="text-slate-500 text-xs uppercase font-medium">އިރުގެ މަގާމު</p>
                     <p id="raw-longitude" class="font-semibold text-slate-300 numeric-data text-[18px]">0.0000°</p>
                 </div>
-                <div class="space-y-1">
+                <div class="space-y-0">
                     <p class="text-slate-500 text-xs uppercase font-medium">ބައިނަލްއަޤްވާމީ ގަޑި</p>
                     <p id="utc-clock" class="text-slate-300 numeric-data text-[18px]">--:--:--</p>
                 </div>
@@ -121,22 +121,22 @@
         </div>
 
         <!-- Viewport B: Interactive Timeline Exploration View panel container layout -->
-        <div id="view-timeline" class="hidden space-y-3 pb-6 animate-fade-in">
-            <div id="timeline-container" class="space-y-2.5">
+        <div id="view-timeline" class="hidden space-y-1 pb-6 animate-fade-in">
+            <div id="timeline-container" class="space-y-1">
                 <!-- Programmatically rendered lists mapped straight into active DOM view structure -->
             </div>
         </div>
     </main>
 
     <!-- Persistent Floating App Navigation Menu Footer Track -->
-    <nav class="w-full bg-slate-950/80 border-t border-slate-900/60 backdrop-blur-2xl flex justify-around items-center py-2 px-6 pb-5 shrink-0 z-40">
-        <button id="tab-btn-dash" type="button" class="flex flex-col items-center justify-center text-emerald-400 transition-all duration-300 scale-100 active:scale-95 w-1/2 py-1 cursor-pointer">
-            <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
-            <span class="text-sm font-medium tracking-wide">މިހާރު</span>
+    <nav class="w-full bg-slate-950/80 border-t border-slate-900/60 backdrop-blur-2xl flex justify-around items-center py-0 px-0 pb-0 shrink-0 z-40">
+        <button id="tab-btn-dash" type="button" class="flex flex-col items-center justify-center text-emerald-400 transition-all duration-300 scale-70 active:scale-80 w-1/2 py-0 px-0 pb-0 cursor-pointer">
+            <svg class="w-4 h-4 mb-0" fill="none" stroke="currentColor" viewBox="0 0 20 20" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v4a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+            <span class="text-base font-medium tracking-wide">މިހާރު</span>
         </button>
-        <button id="tab-btn-time" type="button" class="flex flex-col items-center justify-center text-slate-500 transition-all duration-300 scale-100 active:scale-95 w-1/2 py-1 cursor-pointer">
-            <svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
-            <span class="text-sm font-medium tracking-wide">ހުރިހާ ނަކަތްތައް</span>
+        <button id="tab-btn-time" type="button" class="flex flex-col items-center justify-center text-slate-500 transition-all duration-300 scale-70 active:scale-80 w-1/2 py-0 px-0 pb-0 cursor-pointer">
+            <svg class="w-4 h-4 mb-0" fill="none" stroke="currentColor" viewBox="0 0 20 20" stroke-width="1"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+            <span class="text-base font-medium tracking-wide">ހުރިހާ ނަކަތްތައް</span>
         </button>
     </nav>
 
@@ -228,7 +228,7 @@
                 row.type = "button";
                 row.onclick = () => handleNakaiyClick(index);
                 
-                row.className = `w-full text-right flex justify-between items-center p-4 rounded-2xl border transition-all duration-200 cursor-pointer ${
+                row.className = `w-full text-right flex justify-between items-center p-1 rounded-sm border transition-all duration-200 cursor-pointer ${
                     isSelected 
                     ? "bg-emerald-500/10 border-emerald-500/40 text-emerald-300 font-medium shadow-md" 
                     : "bg-slate-900/30 border-slate-900/40 text-slate-400 active:bg-slate-900/60"
@@ -236,11 +236,11 @@
                 
                 row.innerHTML = `
                     <div class="flex items-center gap-3">
-                        <span class="w-2 h-2 rounded-full ${isActualLiveNow ? 'bg-emerald-400 animate-pulse' : 'bg-transparent'}"></span>
-                        <span class="${isSelected ? 'text-white text-base' : 'text-sm'}">${nakaiy.name}</span>
-                        ${isActualLiveNow ? '<span class="text-[9px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full mr-2 font-medium">މިހާރު</span>' : ''}
+                        <span class="w-4 h-4 rounded-full ${isActualLiveNow ? 'bg-emerald-400 animate-pulse' : 'bg-transparent'}"></span>
+                        <span class="${isSelected ? 'text-white text-base' : 'text-base'}">${nakaiy.name}</span>
+                        ${isActualLiveNow ? '<span class="text-sm bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full ml-2 font-medium">މިހާރު</span>' : ''}
                     </div>
-                    <span class="text-sm tracking-wide px-2.5 py-0.5 rounded-full bg-slate-950/40 ${nakaiy.monsoon === 'އިރުވައި' ? 'text-amber-500/60 border border-amber-500/10' : 'text-sky-500/60 border border-sky-500/10'}">${nakaiy.monsoon}</span>
+                    <span class="text-sm tracking-wide px-1.5 py-0.5 rounded-sm bg-slate-950/40 ${nakaiy.monsoon === 'އިރުވައި' ? 'text-amber-500/60 border border-amber-500/10' : 'text-sky-500/60 border border-sky-500/10'}">${nakaiy.monsoon}</span>
                 `;
                 container.appendChild(row);
             });
